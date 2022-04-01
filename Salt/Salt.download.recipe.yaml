@@ -1,0 +1,15 @@
+Description: Downloads the latest version of Salt
+
+Identifier: com.github.arequ.download.Salt
+
+Input:
+  NAME: Salt
+
+MinimumVersion: '1.0.0'
+
+Process:
+- Processor: URLDownloader
+  Arguments:
+      url: https://repo.saltproject.io/osx/salt-latest-py3-x86_64.pkg
+
+- Processor: EndOfCheckPhase

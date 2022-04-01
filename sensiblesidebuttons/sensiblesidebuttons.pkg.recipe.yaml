@@ -1,13 +1,10 @@
 Comment: Created with Recipe Robot v2.2.0 (https://github.com/homebysix/recipe-robot)
-
 Description: Downloads the latest version of SensibleSideButtons and creates a package.
-
 Identifier: com.github.arequ.pkg.SensibleSideButtons
 
 Input:
   NAME: SensibleSideButtons
 MinimumVersion: '1.0.0'
-
 ParentRecipe: com.github.arequ.download.SensibleSideButtons
 
 Process:

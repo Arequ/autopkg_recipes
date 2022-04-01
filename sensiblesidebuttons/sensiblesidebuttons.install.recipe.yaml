@@ -1,18 +1,15 @@
 Comment: Created with Recipe Robot v2.2.0 (https://github.com/homebysix/recipe-robot)
-
 Description: Installs the latest version of SensibleSideButtons.
-
 Identifier: com.github.arequ.install.SensibleSideButtons
 
 Input:
   NAME: SensibleSideButtons
-
 MinimumVersion: '1.0.0'
 
 ParentRecipe: com.github.arequ.download.SensibleSideButtons
 
 Process:
-- Processor: InstallFromDMG 
+- Processor: InstallFromDMG
   Arguments:
     dmg_path: '%pathname%'
     items_to_copy:

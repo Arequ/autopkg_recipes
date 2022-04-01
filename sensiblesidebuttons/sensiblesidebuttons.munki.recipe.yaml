@@ -1,8 +1,6 @@
 Comment: Created with Recipe Robot v2.2.0 (https://github.com/homebysix/recipe-robot)
-
 Description: Downloads the latest version of SensibleSideButtons and imports it into
   Munki.
-
 Identifier: com.github.arequ.munki.SensibleSideButtons
 
 Input:
@@ -27,4 +25,3 @@ Process:
   Arguments:
     pkg_path: '%pathname%'
     repo_subdirectory: '%MUNKI_REPO_SUBDIR%'
-  

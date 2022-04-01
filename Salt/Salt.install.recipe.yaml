@@ -1,0 +1,15 @@
+Comment: Created with Recipe Robot v2.2.0 (https://github.com/homebysix/recipe-robot)
+Description: Installs the latest version of Salt.
+Identifier: com.github.arequ.install.Salt
+
+Input:
+  NAME: Salt
+
+MinimumVersion: '1.0.0'
+ParentRecipe: com.github.arequ.download.Salt
+
+Process:
+- Processor: Installer
+  Arguments:
+    pkg_path: '%pathname%'
+  
