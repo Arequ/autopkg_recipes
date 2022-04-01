@@ -1,0 +1,25 @@
+Comment: Created with Recipe Robot v2.2.0 (https://github.com/homebysix/recipe-robot)
+Description: Downloads the latest version of Rectangle.
+Identifier: com.github.arequ.download.Rectangle
+Input:
+  NAME: Rectangle
+MinimumVersion: '1.0.0'
+
+Process:
+- Processor: SparkleUpdateInfoProvider
+  Arguments:
+    appcast_url: https://rectangleapp.com/downloads/updates.xml
+  
+- Processor: URLDownloader   
+  Arguments:
+    filename: '%NAME%-%version%.dmg'
+  
+- Processor: EndOfCheckPhase
+
+- Processor: CodeSignatureVerifier
+  Arguments:
+    input_path: '%pathname%/Rectangle.app'
+    requirement: anchor apple generic and identifier "com.knollsoft.Rectangle" and
+      (certificate leaf[field.1.2.840.113635.100.6.1.9] /* exists */ or certificate
+      1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13]
+      /* exists */ and certificate leaf[subject.OU] = XSYZ3E4B7D)
