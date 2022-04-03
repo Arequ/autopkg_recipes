@@ -1,11 +1,11 @@
 Description: Downloads the latest version of Salt
-
 Identifier: com.github.arequ.download.Salt
+MinimumVersion: '1.0.0'
 
 Input:
   NAME: Salt
 
-MinimumVersion: '1.0.0'
+
 
 Process:
 - Processor: URLDownloader

@@ -1,0 +1,14 @@
+Description: Installs the latest version of Puppet-Agent.
+Identifier: com.github.arequ.install.Puppet-Agent
+MinimumVersion: '1.0.0'
+
+Input:
+  NAME: Puppet-Agent
+
+ParentRecipe: com.github.arequ.download.Puppet-Agent
+
+Process:
+- Processor: Installer
+  Arguments:
+    pkg_path: '%pathname%'
+  

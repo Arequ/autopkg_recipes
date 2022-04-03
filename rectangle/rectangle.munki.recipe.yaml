@@ -1,6 +1,6 @@
-Comment: Created with Recipe Robot v2.2.0 (https://github.com/homebysix/recipe-robot)
 Description: Downloads the latest version of Rectangle and imports it into Munki.
 Identifier: com.github.arequ.munki.Rectangle
+MinimumVersion: '1.0.0'
 
 Input:
   MUNKI_REPO_SUBDIR: apps/%NAME%
@@ -15,12 +15,11 @@ Input:
     name: '%NAME%'
     unattended_install: true
 
-MinimumVersion: '1.0.0'
-
 ParentRecipe: com.github.arequ.download.Rectangle
 
 Process:
 - Processor: MunkiImporter
   Arguments:
+    extract_icon: true
     pkg_path: '%pathname%'
     repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

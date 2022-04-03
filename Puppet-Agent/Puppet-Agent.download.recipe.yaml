@@ -1,0 +1,24 @@
+Description: Downloads the latest version of Puppet-Agent
+Identifier: com.github.arequ.download.Puppet-Agent
+MinimumVersion: '1.0.0'
+
+Input:
+  NAME: Puppet-Agent
+  PUPPET_MAJ_VERSION: '7'
+  PUPPET_MIN_VERSION: '15.0-1'
+  OS_VERSION: '11' # Select macOS 11 for Monterey (macOS 12)
+  ARCH: 'x86_64'
+
+Process:
+- Processor: URLDownloader
+  Arguments:
+      url: https://downloads.puppetlabs.com/mac/puppet%PUPPET_MAJ_VERSION%/%OS_VERSION%/%ARCH%/puppet-agent-%PUPPET_MAJ_VERSION%.%PUPPET_MIN_VERSION%.osx%OS_VERSION%.dmg
+
+- Processor: EndOfCheckPhase
+
+- Processor: InstallFromDMG
+  Arguments:
+    dmg_path: '%pathname%'
+    items_to_copy:
+    - destination_path: '%RECIPE_CACHE_DIR%/downloads'
+      source_item: 'puppet-agent-%PUPPET_MAJ_VERSION%.%PUPPET_MIN_VERSION%-installer.pkg'

@@ -1,9 +1,9 @@
-Comment: Created with Recipe Robot v2.2.0 (https://github.com/homebysix/recipe-robot)
 Description: Downloads the latest version of Rectangle.
 Identifier: com.github.arequ.download.Rectangle
+MinimumVersion: '1.0.0'
+
 Input:
   NAME: Rectangle
-MinimumVersion: '1.0.0'
 
 Process:
 - Processor: SparkleUpdateInfoProvider

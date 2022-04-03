@@ -1,0 +1,23 @@
+Description: Downloads the latest version of Python and imports it into Munki.
+Identifier: com.github.arequ.munki.Python
+MinimumVersion: '1.0.0'
+
+Input:
+  MUNKI_REPO_SUBDIR: apps/%NAME%
+  NAME: Python
+  pkginfo:
+    catalogs:
+    - testing
+    description: Framework files for use with popular python macadmin toolsets
+    developer: Clever DevOps Co.
+    display_name: Python
+    name: '%NAME%'
+    unattended_install: true
+
+ParentRecipe: com.github.arequ.download.Python
+
+Process:
+- Processor: MunkiImporter
+  Arguments:
+    pkg_path: '%pathname%'
+    repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

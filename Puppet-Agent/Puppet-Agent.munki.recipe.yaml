@@ -1,0 +1,23 @@
+Description: Downloads the latest version of Puppet-Agent and imports it into Munki.
+Identifier: com.github.arequ.munki.Puppet-Agent
+MinimumVersion: '1.0.0'
+
+Input:
+  MUNKI_REPO_SUBDIR: apps/%NAME%
+  NAME: Puppet-Agent
+  pkginfo:
+    catalogs:
+    - testing
+    description: Puppet-Agent for macOS.
+    developer: Puppet
+    display_name: Puppet-Agent
+    name: '%NAME%'
+    unattended_install: true
+
+ParentRecipe: com.github.arequ.download.Puppet-Agent
+
+Process:
+- Processor: MunkiImporter
+  Arguments:
+    pkg_path: '%pathname%'
+    repo_subdirectory: '%MUNKI_REPO_SUBDIR%'
