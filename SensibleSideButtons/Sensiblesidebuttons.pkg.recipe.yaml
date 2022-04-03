@@ -1,0 +1,11 @@
+Description: Downloads the latest version of SensibleSideButtons and creates a package.
+Identifier: com.github.arequ.pkg.SensibleSideButtons
+MinimumVersion: '1.0.0'
+
+Input:
+  NAME: SensibleSideButtons
+
+ParentRecipe: com.github.arequ.download.SensibleSideButtons
+
+Process:
+- Processor: AppPkgCreator

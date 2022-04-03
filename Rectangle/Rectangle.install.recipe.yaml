@@ -1,0 +1,17 @@
+Description: Installs the latest version of Rectangle.
+Identifier: com.github.arequ.install.Rectangle
+MinimumVersion: '1.0.0'
+
+Input:
+  NAME: Rectangle
+
+ParentRecipe: com.github.arequ.download.Rectangle
+
+Process:
+- Processor: InstallFromDMG
+  Arguments:
+    dmg_path: '%pathname%'
+    items_to_copy:
+    - destination_path: /Applications
+      source_item: Rectangle.app
+  
