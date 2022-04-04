@@ -10,5 +10,5 @@ ParentRecipe: com.github.arequ.download.Puppet-Agent
 Process:
 - Processor: Installer
   Arguments:
-    pkg_path: '%pathname%'
+    pkg_path: '%RECIPE_CACHE_DIR%/downloads/puppet-agent-%PUPPET_MAJ_VERSION%.%PUPPET_MIN_VERSION%-installer.pkg'
   

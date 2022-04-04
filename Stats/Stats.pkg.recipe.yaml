@@ -1,0 +1,10 @@
+Description: Downloads the latest version of Stats and creates a package.
+Identifier: com.github.arequ.pkg.Stats
+MinimumVersion: '1.0.0'
+
+Input:
+  NAME: Stats
+
+ParentRecipe: com.github.arequ.download.Stats
+Process:
+- Processor: AppPkgCreator

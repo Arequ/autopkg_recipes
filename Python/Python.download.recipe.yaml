@@ -11,13 +11,8 @@ Process:
     asset_regex: .*\.pkg$
     github_repo: macadmins/python
 
-- Processor: URLDownloader
+- Processor: URLDownloaderPython
   Arguments:
     filename: '%NAME%-%version%.pkg'
 
 - Processor: EndOfCheckPhase
-
-- Processor: Versioner
-  Arguments:
-    input_plist_path: '%RECIPE_CACHE_DIR%/%NAME%/Python3.framework/Versions/3.9/Resources/Python.app/Contents/Info.plist'
-    plist_version_key: CFBundleShortVersionString

@@ -1,0 +1,29 @@
+Description: Downloads the latest version of iTerm2 and imports it into Munki.
+Identifier: com.github.arequ.munki.iTerm2
+MinimumVersion: '1.0.0'
+
+Input:
+  APP_FILENAME: iTerm
+  MUNKI_REPO_SUBDIR: apps/%NAME%
+  NAME: iTerm2
+  pkginfo:
+    catalogs:
+    - testing
+    description: ' '
+    developer: GEORGE NACHMAN
+    display_name: iTerm2
+    name: '%NAME%'
+    unattended_install: true
+
+ParentRecipe: com.github.arequ.download.iTerm2
+
+Process:
+- Processor: DmgCreator
+  Arguments:
+    dmg_path: '%RECIPE_CACHE_DIR%/%NAME%.dmg'
+    dmg_root: '%RECIPE_CACHE_DIR%/%NAME%'
+    
+- Processor: MunkiImporter
+  Arguments:
+    pkg_path: '%dmg_path%'
+    repo_subdirectory: '%MUNKI_REPO_SUBDIR%'

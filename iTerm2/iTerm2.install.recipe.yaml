@@ -1,0 +1,22 @@
+Description: Installs the latest version of iTerm2.
+Identifier: com.github.arequ.install.iTerm2
+MinimumVersion: '1.0.0'
+
+Input:
+  APP_FILENAME: iTerm
+  NAME: iTerm2
+
+ParentRecipe: com.github.arequ.download.iTerm2
+
+Process:
+- Processor: DmgCreator
+  Arguments:
+    dmg_path: '%RECIPE_CACHE_DIR%/%NAME%.dmg'
+    dmg_root: '%RECIPE_CACHE_DIR%/%NAME%'
+
+- Processor: InstallFromDMG
+  Arguments:
+    dmg_path: '%dmg_path%'
+    items_to_copy:
+    - destination_path: /Applications
+      source_item: iTerm.app
