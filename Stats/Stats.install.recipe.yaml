@@ -1,0 +1,16 @@
+Description: Installs the latest version of Stats.
+Identifier: com.github.arequ.install.Stats
+MinimumVersion: '1.0.0'
+
+Input:
+  NAME: Stats
+
+ParentRecipe: com.github.arequ.download.Stats
+
+Process:
+- Processor: InstallFromDMG
+  Arguments:
+    dmg_path: '%pathname%'
+    items_to_copy:
+    - destination_path: /Applications
+      source_item: Stats.app

@@ -1,0 +1,23 @@
+Description: Downloads the latest version of Stats and imports it into Munki.
+Identifier: com.github.arequ.munki.Stats
+MinimumVersion: '1.0.0'
+
+Input:
+  MUNKI_REPO_SUBDIR: apps/%NAME%
+  NAME: Stats
+  pkginfo:
+    catalogs:
+    - testing
+    description: macOS system monitor in your menu bar
+    developer: Serhiy Mytrovtsiy
+    display_name: Stats
+    name: '%NAME%'
+    unattended_install: true
+
+ParentRecipe: com.github.arequ.download.Stats
+
+Process:
+- Processor: MunkiImporter
+  Arguments:
+    pkg_path: '%pathname%'
+    repo_subdirectory: '%MUNKI_REPO_SUBDIR%'
