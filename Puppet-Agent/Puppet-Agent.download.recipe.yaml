@@ -16,6 +16,10 @@ Process:
 
 - Processor: EndOfCheckPhase
 
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: 'download_changed == FALSE'
+
 - Processor: InstallFromDMG
   Arguments:
     dmg_path: '%pathname%'
