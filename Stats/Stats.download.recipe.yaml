@@ -17,6 +17,10 @@ Process:
 
 - Processor: EndOfCheckPhase
 
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: 'download_changed == FALSE'
+
 - Processor: CodeSignatureVerifier
   Arguments:
     input_path: '%pathname%/Stats.app'

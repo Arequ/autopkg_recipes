@@ -13,3 +13,7 @@ Process:
       url: https://repo.saltproject.io/osx/salt-latest-py3-x86_64.pkg
 
 - Processor: EndOfCheckPhase
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: 'download_changed == FALSE'
