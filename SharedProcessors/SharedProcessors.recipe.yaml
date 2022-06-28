@@ -1,0 +1,8 @@
+Description: A collection of shared processors.
+Identifier: com.github.arequ.SharedProcessors
+MinimumVersion: '1.0.0'
+
+Input:
+  -
+Process:
+  -
