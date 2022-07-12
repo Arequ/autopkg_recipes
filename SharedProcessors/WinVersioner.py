@@ -102,7 +102,7 @@ class WinVersioner(Processor):  # pylint: disable=too-few-public-methods
         try:
             return check_output(command).decode("utf-8")
         except CalledProcessError:
-            raise ProcessorError(f"Running of command: {command} has failed.") 
+            raise ProcessorError(f"Running of command: {command} has failed.")
 
     def main(self):
         """gimme some main"""
@@ -130,7 +130,7 @@ class WinVersioner(Processor):  # pylint: disable=too-few-public-methods
         if self.metadata:
             self.env["pkg_display_name"] = self.get_display_name()
             self.env["pkg_sha256"] = self.get_sha256sum()
-            self.env["pkg_fileextension"] = self.file_extension
+            self.env["pkg_file_extension"] = self.file_extension
             if "chrome" in self.env["pkg_display_name"].lower():
                 self.env["pkg_version"] = self.get_chrome_version()
             else:

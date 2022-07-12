@@ -15,8 +15,10 @@
 """See docstring for GorillaImporter class"""
 
 import os
-import plistlib
+import pathlib
 import subprocess
+import shutil
+from ruamel.yaml import YAML
 
 from autopkglib import Processor, ProcessorError
 
@@ -58,146 +60,128 @@ class GorillaImporter(Processor):
             "required": False,
             "description": "An optional array with required dependencies."
         },
-        "pkg_installer": {
+        "pkg_installer_arguments": {
             "required": False,
-            "description": "An optional hash with gorilla installer options."
+            "description": "An optional array with gorilla installer options."
         },
-        "pkg_uninstaller": {
+        "pkg_uninstaller_arguments": {
             "required": False,
-            "description": "An optional hash with gorilla uninstaller options."
+            "description": "An optional array with gorilla uninstaller options."
         },
+        "yaml_entry": {
+            "required": False,
+            "description": "If you want to specify all the gorilla args"
+        }
     }
     output_variables = {
-        "pkginfo_repo_path": {
-            "description": (
-                "The repo path where the pkginfo was written. "
-                "Empty if item not imported."
-            )
-        },
         "pkg_repo_path": {
             "description": (
                 "The repo path where the pkg was written. "
                 "Empty if item not imported."
             )
         },
-        "munki_info": {
-            "description": "The pkginfo property list. Empty if item not imported."
-        },
-        "munki_repo_changed": {"description": "True if item was imported."},
-        "munki_importer_summary_result": {
+        "gorilla_repo_changed": {"description": "True if item was imported."},
+        "gorilla_importer_summary_result": {
             "description": "Description of interesting results."
         },
     }
     description = __doc__
 
-    def yaml_to_dict(self, file):
+    def yaml_to_dict(self):
         """takes yaml and turns it into a dict"""
+        self.yaml = YAML()
+        self.yaml.default_flow_stye=False
+        with open(self.yaml_file, "r") as f:
+            return self.yaml.load(f.read())
 
-    def compare_file_hashes(self):
+    def write_out_catalog(self, catalog):
+        with open(self.yaml_file, "w") as f:
+            self.yaml.dump(catalog, f)
+
+    def hashes_are_identical(self):
         """compares sha256sum of existing file with remotefile"""
+        try:
+            existing_file_hash = self.pkg_entry["installer"]["hash"]
+        except KeyError:
+            existing_file_hash = None
+        new_file_hash = self.env["pkg_sha256"].upper()
+        return existing_file_hash == new_file_hash
 
-    def modify_entry(self):
+    def backup_catalog(self):
+        """Backs up old version"""
+        shutil.copy(self.yaml_file, f"{self.yaml_file}.bak")
 
-    def check_if_pkg_existing(self):
+    def update_pkg_entry(self, catalog):
+        self.pkg_entry["display_name"] = self.env["pkg_shortname"] # is not actually in use..
+        self.pkg_entry["version"] = self.env["pkg_version"]
 
-    def load_yaml_2_dict(yaml_file):
+        # If it's in the catalog, it should have an installer key, no?
+        self.pkg_entry["installer"]["hash"] = self.env["pkg_sha256"].upper()
+        self.pkg_entry["installer"]["location"] = os.path.join(self.env["gorilla_subdirectories"], self.dest_filename)
+        self.pkg_entry["installer"]["type"] = self.env["pkg_file_extension"]
+        # We may have specified additional arguments, override everything with those.
+        try:
+            self.pkg_entry["installer"]["arguments"] = self.env["pkg_installer_arguments"]
+        except KeyError:
+            pass
+
+        if "check" in self.pkg_entry.keys():
+            if "registry" in self.pkg_entry["check"].keys():
+                self.pkg_entry["check"]["registry"]["name"] = self.env["pkg_display_name"]
+                self.pkg_entry["check"]["registry"]["version"] = self.env["pkg_version"]
+
+        if "uninstaller" in self.pkg_entry.keys():
+            self.pkg_entry["uninstaller"]["hash"] = self.env["pkg_sha256"].upper()
+            self.pkg_entry["uninstaller"]["location"] = os.path.join(self.env["gorilla_subdirectories"], self.dest_filename)
+            self.pkg_entry["uninstaller"]["type"] = self.env["pkg_file_extension"]
+            try:
+                self.pkg_entry["uninstaller"]["arguments"] = self.env["pkg_uninstaller_arguments"]
+            except KeyError:
+                pass
+
+    def copy_pkg_to_repo(self):
+        """Grabs the downloaded file pathname to move into the repo"""
+        dest_path = os.path.join(self.env["gorilla_repo"], "pkgs", self.env["gorilla_subdirectories"])
+        if not os.path.isdir(dest_path):
+            pathlib.Path(dest_path).mkdir(parents=True, exist_ok=True)
+        self.env["pkg_repo_path"] = os.path.join(dest_path, self.dest_filename)
+        shutil.copy(self.env["pathname"],self.env["pkg_repo_path"])
 
 
-class Playa(Playa):
     def main(self):
-        inputs = {
-            "display_name"
-        }
-        with open(f"{self.env['gorilla_repo']}/catalogs/{self.env['gorilla_catalog']}") as f:
-            catalog = yaml.load(f, Loader=yaml.FullLoader)
-        if self.env['pkg_shortname'].lower() in [shortname.lower() for shortname in catalog.keys()]:
+        self.yaml_file = os.path.join(
+            self.env["gorilla_repo"], "catalogs", f"{self.env['gorilla_catalog']}.yaml"
+        )
+        catalog = self.yaml_to_dict()
+        self.dest_filename = f"{self.env['pkg_shortname']}-{self.env['pkg_version']}.{self.env['pkg_file_extension']}"
+        self.copy_pkg_to_repo()
 
-shortname = 'nessus'
-version = '8.5.1.9999'
+        try:
+            self.pkg_entry = catalog[self.env["pkg_shortname"]]
+        except KeyError:
+            self.pkg_entry = {}
 
-{'display_name': 'nessus', 'check': {'registry': {'name': 'Nessus Agent (x64)', 'version': '8.5.1.9999'}}, 'installer': {'location': 'pkgs/nessus/nessus-7.5.1.20012.msi', 'hash': 'ARANDOMHASHVALUE', 'arguments': ['/qn', '/norestart'], 'type': 'msi'}, 'uninstaller': {'location': 'pkgs/nessus/nessus-7.5.1.20012.msi', 'hash': 'E165770383BC176E818B7611F521BDAAD8B14F59D545ED2861A24D9D3CF00CFB', 'type': 'msi'}, 'version': '8.5.1.9999'}
+        if "yaml_entry" in self.env:
+            for key in self.env["yaml_entry"]:
+                self.pkg_entry[key] = self.env["yaml_entry"][key]
+
+        if self.hashes_are_identical():
+            self.output("File hashes are identical. Stopping processor.")
+            self.env["gorilla_repo_changed"] = False
+            return
+
+        self.update_pkg_entry(catalog)
+        self.output(self.pkg_entry)
+        # Update the catalog to include the new entries data.
+        catalog[self.env["pkg_shortname"]] = self.pkg_entry
+        # Backup catalog, just in case..
+        shutil.copy(self.yaml_file, f"{self.yaml_file}.bak")
+        self.write_out_catalog(catalog)
+        self.env["gorilla_importer_summary"] = self.pkg_entry
+        self.env["gorilla_repo_changed"] = True
+        self.output(f"{self.pkg_entry} has been added to the catalog.")
 
 
 if __name__ == "__main__":
     PROCESSOR = GorillaImporter()
     PROCESSOR.execute_shell()
-
-
-## Read
-
-    print(data)
-
-## Write
-with open('./catalogs/alpha.yaml') as f:
-    data = yaml.load(f, Loader=yaml.FullLoader)
-    print(data)
-    sorted_data = yaml.dump(data, sort_keys=True)
-    print(sorted_data)
-
-with open('./catalogs/alpha_test.yaml', 'w') as f:
-    yaml.dump(data, f, explicit_start=True, sort_keys=False)
-
-"""
-Guesstimate preferred order of keys to keep things in line...
----
-GorillaPkgName:
-  dependencies: if required seem to be top of list.
-  display_name: HumanReadableName # not actually used anywhere..
-  check:
-    file:
-      - path: 'required_full_pathname_to_see_if_file_exists'
-        version: 'optional version of file found in Details under properties'
-        hash: 'option sha256 of item at path'
-    registry:
-      name: 'Name as it appears in registry' # HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\
-      version: 0.0.0.0 # version as it appears in same registry location
-    script: |
-      a powershell script..
-      that can go on
-      for lines...
-      needs to
-      exit 0
-  installer:
-    location: 'required file_path relative to gorilla repo'
-    hash: 'required sha256 of file at location'
-    arguments:
-      - 'Optional'
-      - 'List'
-      - 'Of arguments'
-    type: 'required define installer type (nupkg, msi, exe, ps1)'
-  uninstaller:
-    location: 'required file_path relative to gorilla repo'
-    hash: 'required sha256 of file at location'
-    arguments:
-      - 'Optional'
-      - 'List'
-      - 'Of arguments'
-    type: 'required define installer type (nupkg, msi, exe, ps1)'
-"""
-# Chrome input examples..
-pkg_sha256 = "076337e41345fe3a538c813782e771bdc2575cada95e779101b0fadb55b4ecc8"
-pkg_version = "103.0.5060.53"
-pathname = "./"
-
-# For things like google chrome, we can't completely rely on the file hash because for some odd reason...
-# They thought it was a good idea to have a different file hash per download as a way to track where stuff
-# is being downloaded from I presume. For example, I can't find the link that produces the hash that is
-# currently uploaded on the s3 bucket...
-
-# So we'll move on to comparing the existing msi files version..
-# We can do an MSIInspect or we can do it from the filename since we expect every file to have 
-# a correct version name in it..
-# We'll start off with filename as path of least resistance for at least MSI and EXE files..
-
-def get_file_extension(self):
-    """determine whether its an msi or exe"""
-    return self.env["pathname"].split(".")[-1]
-
-def find_existing_entry(self):
-    # There may be an existing entry somewhere with the specific alterations required to install
-    # a specific piece of software, let's look for that first.
-    os.glob
-def get_msi_or_exe_version():
-
-def determine_file_extension():
-

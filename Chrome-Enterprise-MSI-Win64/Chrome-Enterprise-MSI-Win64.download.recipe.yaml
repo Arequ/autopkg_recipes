@@ -1,0 +1,32 @@
+Description: Downloads the latest version of Google Chrome Enterprise (64-bit) for Windows
+Identifier: com.github.arequ.download.Chrome-Enterprise-Win64
+MinimumVersion: '1.0.0'
+
+Input:
+  APP_FILENAME: GoogleChromeStandaloneEnterprise64.msi
+  SIGNATURE: E59B5250A978903656E8EFDB422C10E65AB85A99DC4F230A69E97D8F1301D1BA
+  SUBJECT: /C=US/ST=California/L=Mountain View/O=Google LLC/CN=Google LLC
+  DOWNLOAD_URL: https://dl.google.com/chrome/install/GoogleChromeStandaloneEnterprise64.msi
+  NAME: Google Chrome (64-bit)
+
+Process:
+- Processor: URLDownloaderPython
+  Arguments:
+    url: '%DOWNLOAD_URL%'
+    filename: '%APP_FILENAME%'
+
+- Processor: EndOfCheckPhase
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: 'download_changed == FALSE'
+
+- Processor: com.github.arequ.SharedProcessors/WinSignatureVerify
+  Arguments:
+    pathname: '%pathname%'
+    expected_subject: '%SUBJECT%'
+    expected_signature: '%SIGNATURE%'
+
+- Processor: com.github.arequ.SharedProcessors/WinVersioner
+  Arguments:
+    pathname: '%pathname%'
