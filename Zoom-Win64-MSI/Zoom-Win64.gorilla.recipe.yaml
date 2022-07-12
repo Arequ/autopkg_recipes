@@ -1,0 +1,34 @@
+Description: Configures Zoom for Gorilla
+Identifier: com.github.arequ.gorilla.Zoom-Win64
+MinimumVersion: '1.0.0'
+
+Input:
+  SHORTNAME: Zoom
+  GORILLA_REPO: /Users/alex.alequin/src/gorilla_repo_local
+  GORILLA_CATALOG: alpha_test
+  GORILLA_SUBDIRECTORIES: zoom/
+  yaml_entry:
+    installer:
+      arguments:
+        - ZSilentStart=true
+        - ZConfig=DisableLoginWithEmail=1;nofacebook=1;nogoogle=1;KeepSignedIn=1
+        - MSIRESTARTMANAGERCONTROL=Disable
+    check:
+      registry:
+        version: ''
+        name: ''
+    uninstaller:
+      location: ''
+      hash: ''
+      type: ''
+
+ParentRecipe: com.github.arequ.download.Zoom-Win64
+
+Process:
+- Processor: com.github.arequ.SharedProcessors/GorillaImporter
+  Arguments:
+    gorilla_repo: '%GORILLA_REPO%'
+    gorilla_catalog: '%GORILLA_CATALOG%'
+    gorilla_subdirectories: '%GORILLA_SUBDIRECTORIES%'
+    pkg_shortname: '%SHORTNAME%'
+    pkg_version: '%pkg_version%'
