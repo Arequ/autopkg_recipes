@@ -3,13 +3,11 @@
 See docstring for WinSignatureVerify class
 """
 
-from subprocess import check_output, CalledProcessError
 import re
+from subprocess import CalledProcessError, check_output
 
 from autopkglib import (  # pylint: disable=import-error,unused-import
-    Processor,
-    ProcessorError,
-)
+    Processor, ProcessorError)
 
 __all__ = ["WinSignatureVerify"]
 
