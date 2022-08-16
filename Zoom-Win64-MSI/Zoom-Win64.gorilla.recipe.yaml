@@ -5,7 +5,7 @@ MinimumVersion: '1.0.0'
 Input:
   SHORTNAME: Zoom
   GORILLA_REPO: /Users/alex.alequin/src/gorilla_repo_local
-  GORILLA_CATALOG: alpha_test
+  GORILLA_CATALOG: alpha
   GORILLA_SUBDIRECTORIES: zoom/
   yaml_entry:
     installer:
