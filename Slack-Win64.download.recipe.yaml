@@ -1,0 +1,33 @@
+Description: Downloads the latest version of Slack (64-bit) for Windows
+Identifier: com.github.arequ.download.Slack-Win64
+MinimumVersion: '1.0.0'
+
+Input:
+  SIGNATURE: 39E0BF91F4301FFE942B62856E7F9B4A140FD8D74E745B823183F83DF244BFE4
+  SUBJECT: /C=US/ST=California/L=San Francisco/O=Slack Technologies, Inc./CN=Slack Technologies, Inc.
+  DOWNLOAD_URL: https://slack.com/ssb/download-win64-msi
+
+Process:
+- Processor: URLDownloader
+  Arguments:
+    url: '%DOWNLOAD_URL%'
+    prefetch_filename: true
+    request_headers:
+      user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.1 Safari/537.36
+    CHECK_FILESIZE_ONLY: true
+
+- Processor: EndOfCheckPhase
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: 'download_changed == FALSE'
+
+- Processor: com.github.arequ.SharedProcessors/WinSignatureVerify
+  Arguments:
+    pathname: '%pathname%'
+    expected_subject: '%SUBJECT%'
+    expected_hash: '%SIGNATURE%'
+
+- Processor: com.github.arequ.SharedProcessors/WinVersioner
+  Arguments:
+    pathname: '%pathname%'

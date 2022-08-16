@@ -1,0 +1,32 @@
+Description: Configures Slack for Gorilla
+Identifier: com.github.arequ.gorilla.Slack-Win64
+MinimumVersion: '1.0.0'
+
+Input:
+  SHORTNAME: Slack
+  GORILLA_REPO: /Users/Shared/gorilla_repo
+  GORILLA_CATALOG: alpha
+  GORILLA_SUBDIRECTORIES: slack/
+  yaml_entry:
+    installer:
+      location: ''
+      hash: ''
+    check:
+      registry:
+        version: ''
+        name: ''
+    uninstaller:
+      location: ''
+      hash: ''
+      type: ''
+
+ParentRecipe: com.github.arequ.download.Slack-Win64
+
+Process:
+- Processor: com.github.arequ.SharedProcessors/GorillaImporter
+  Arguments:
+    gorilla_repo: '%GORILLA_REPO%'
+    gorilla_catalog: '%GORILLA_CATALOG%'
+    gorilla_subdirectories: '%GORILLA_SUBDIRECTORIES%'
+    pkg_shortname: '%SHORTNAME%'
+    pkg_version: '%pkg_version%'

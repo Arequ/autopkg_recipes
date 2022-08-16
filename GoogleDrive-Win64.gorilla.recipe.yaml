@@ -1,0 +1,27 @@
+Description: Configures Google Drive specifically for deploy via Gorilla.
+Identifier: com.github.arequ.gorilla.GoogleDrive-Win64
+MinimumVersion: '1.0.0'
+
+Input:
+  NAME: Google Drive
+  SHORTNAME: GoogleDrive
+  GORILLA_REPO: /Users/Shared/gorilla_repo
+  GORILLA_CATALOG: alpha
+  GORILLA_SUBDIRECTORIES: google/drive
+  yaml_entry:
+    installer:
+      arguments:
+        - --silent
+        - --desktop_shortcut
+        - --gsuite_shortcuts=false
+
+ParentRecipe: com.github.arequ.download.GoogleDrive-Win64
+
+Process:
+- Processor: com.github.arequ.SharedProcessors/GorillaImporter
+  Arguments:
+    gorilla_repo: '%GORILLA_REPO%'
+    gorilla_catalog: '%GORILLA_CATALOG%'
+    gorilla_subdirectories: '%GORILLA_SUBDIRECTORIES%'
+    pkg_shortname: '%SHORTNAME%'
+    pkg_version: '%pkg_version%'

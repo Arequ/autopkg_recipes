@@ -1,0 +1,29 @@
+Description: Downloads the latest version of NotePad++ (64-bit) for Windows
+Identifier: com.github.arequ.download.NotePadPlusPlus-Win64
+MinimumVersion: '1.0.0'
+
+Input:
+  UPDATE_URL: https://notepad-plus-plus.org/update/getDownloadUrl.php
+
+Process:
+- Processor: URLTextSearcher
+  Arguments:
+    url: '%UPDATE_URL%'
+    result_output_var_name: download_url
+    re_pattern: <Location>(.*exe)</Location>
+
+- Processor: URLDownloader
+  Arguments:
+    url: '%download_url%'
+    prefetch_filename: true
+    request_headers:
+      user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.1 Safari/537.36
+    CHECK_FILESIZE_ONLY: true
+
+- Processor: com.github.arequ.SharedProcessors/WinSignatureVerify
+  Arguments:
+    pathname: '%pathname%'
+
+- Processor: com.github.arequ.SharedProcessors/WinVersioner
+  Arguments:
+    pathname: '%pathname%'

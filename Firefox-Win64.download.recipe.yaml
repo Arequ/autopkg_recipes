@@ -1,0 +1,24 @@
+Description: Downloads the latest version of Firefox (64-bit) for Windows
+Identifier: com.github.arequ.download.Firefox-Win64
+MinimumVersion: '1.0.0'
+
+Input:
+  DOWNLOAD_URL: https://download.mozilla.org/?product=firefox-msi-latest-ssl&os=win64&lang=en-US
+
+Process:
+
+- Processor: URLDownloader
+  Arguments:
+    url: '%DOWNLOAD_URL%'
+    prefetch_filename: true
+    request_headers:
+      user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.1 Safari/537.36
+    CHECK_FILESIZE_ONLY: true
+
+- Processor: com.github.arequ.SharedProcessors/WinSignatureVerify
+  Arguments:
+    pathname: '%pathname%'
+
+- Processor: com.github.arequ.SharedProcessors/WinVersioner
+  Arguments:
+    pathname: '%pathname%'

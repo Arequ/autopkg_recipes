@@ -1,0 +1,20 @@
+Description: Configures NotePadPlusPlus specifically for Uber implementation..
+Identifier: com.github.arequ.gorilla.NotePadPlusPlus-Win64
+MinimumVersion: '1.0.0'
+
+Input:
+  SHORTNAME: notepadplusplus
+  GORILLA_REPO: /Users/Shared/gorilla_repo
+  GORILLA_CATALOG: alpha
+  GORILLA_SUBDIRECTORIES: notepadplusplus/
+
+ParentRecipe: com.github.arequ.download.NotePadPlusPlus-Win64
+
+Process:
+- Processor: com.github.arequ.SharedProcessors/GorillaImporter
+  Arguments:
+    gorilla_repo: '%GORILLA_REPO%'
+    gorilla_catalog: '%GORILLA_CATALOG%'
+    gorilla_subdirectories: '%GORILLA_SUBDIRECTORIES%'
+    pkg_shortname: '%SHORTNAME%'
+    pkg_version: '%pkg_version%'
