@@ -1,0 +1,28 @@
+Description: Downloads the latest version of InstallmacOSApp and imports it into Munki.
+Identifier: com.github.arequ.download.InstallmacOSApp
+MinimumVersion: '1.0.0'
+
+Input:
+  APP_FILENAME: InstallmacOSApp
+  NAME: InstallmacOSApp
+
+Process:
+- Processor: com.github.arequ.SharedProcessors/GetInstallmacOSMetadata
+  Output:
+  - url
+  - display_name
+  - version
+  - build
+
+- Processor: com.github.arequ.SharedProcessors/URLDownloader
+  Arguments:
+    filename: '%display_name%-%build%.pkg'
+    url: '%url%'
+
+- Processor: CodeSignatureVerifier
+  Arguments:
+    input_path: '%pathname%'
+    expected_authority_name:
+    - Software Update
+    - Apple Software Update Certification Authority
+    - Apple Root CA
