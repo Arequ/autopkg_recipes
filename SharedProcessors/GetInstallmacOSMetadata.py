@@ -23,6 +23,7 @@ Gets the download URL of latest version of macOS Installer App from Apple's CDN
 This script makes a lot of assumptions and can break.
 """
 
+import certifi
 import plistlib
 import ssl
 import urllib.request
@@ -31,6 +32,13 @@ from xml.parsers.expat import ExpatError
 
 from autopkglib import Processor, ProcessorError
 
+ca_bundle = certifi.where()
+opener = urllib.request.build_opener(
+    urllib.request.HTTPSHandler(
+        context=ssl.create_default_context(cafile=ca_bundle)
+    )
+)
+urllib.request.install_opener(opener)
 
 class GetInstallmacOSMetadata(Processor):
     """
