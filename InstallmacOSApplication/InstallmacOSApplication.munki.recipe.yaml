@@ -1,22 +1,22 @@
-Description: Downloads the latest version of InstallmacOSApp and imports it into Munki.
-Identifier: com.github.arequ.munki.InstallmacOSApp
+Description: Downloads the latest version of InstallmacOSApplication and imports it into Munki.
+Identifier: com.github.arequ.munki.InstallmacOSApplication
 MinimumVersion: '1.0.0'
 
 Input:
-  APP_FILENAME: InstallmacOSApp
+  APP_FILENAME: InstallmacOSApplication
   MUNKI_REPO_SUBDIR: os_upgrades/%NAME%
-  NAME: InstallmacOSApp
+  NAME: InstallmacOSApplication
   pkginfo:
     catalogs:
     - testing
     category: OS Upgrades
     description: Full macOS Installer from Apple's CDN
     developer: Apple
-    display_name: InstallmacOSApp
+    display_name: InstallmacOSApplication
     name: '%NAME%'
     unattended_install: true
 
-ParentRecipe: com.github.arequ.download.InstallmacOSApp
+ParentRecipe: com.github.arequ.download.InstallmacOSApplication
 
 Process:
 - Processor: MunkiPkginfoMerger
