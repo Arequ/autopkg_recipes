@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Description</key>
+	<string>Download the latest Doppler CLI release tarball from GitHub (no GPG verification).</string>
+	<key>Identifier</key>
+	<string>com.coreweave.it.autopkg.download.DopplerCLI</string>
+	<key>Input</key>
+	<dict>
+		<key>ASSET_REGEX</key>
+		<string>^doppler_.*_macOS_arm64\.tar\.gz$</string>
+		<key>NAME</key>
+		<string>DopplerCLI</string>
+		<key>github_repo</key>
+		<string>DopplerHQ/cli</string>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>2.0</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>asset_regex</key>
+				<string>%ASSET_REGEX%</string>
+				<key>github_repo</key>
+				<string>%github_repo%</string>
+				<key>latest_only</key>
+				<true/>
+			</dict>
+			<key>Processor</key>
+			<string>GitHubReleasesInfoProvider</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict/>
+			<key>Processor</key>
+			<string>URLDownloader</string>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>EndOfCheckPhase</string>
+		</dict>
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>archive_path</key>
+				<string>%pathname%</string>
+				<key>destination_path</key>
+				<string>%RECIPE_CACHE_DIR%/%NAME%</string>
+				<key>purge_destination</key>
+				<true/>
+			</dict>
+			<key>Processor</key>
+			<string>Unarchiver</string>
+		</dict>
+	</array>
+</dict>
+</plist>

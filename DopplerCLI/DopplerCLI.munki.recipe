@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Description</key>
+	<string>Import Doppler CLI pkg into Munki.</string>
+	<key>Identifier</key>
+	<string>com.coreweave.it.autopkg.munki.DopplerCLI</string>
+	<key>Input</key>
+	<dict>
+		<key>MUNKI_CATEGORY</key>
+		<string>Developer</string>
+		<key>MUNKI_DEVELOPER</key>
+		<string>Doppler</string>
+		<key>MUNKI_REPO_SUBDIR</key>
+		<string>applications/Doppler/DopplerCLI</string>
+		<key>NAME</key>
+		<string>DopplerCLI</string>
+		<key>pkginfo</key>
+		<dict>
+			<key>blocking_applications</key>
+			<array>
+				<string>doppler</string>
+			</array>
+			<key>catalogs</key>
+			<array>
+				<string>alpha</string>
+			</array>
+			<key>category</key>
+			<string>%MUNKI_CATEGORY%</string>
+			<key>description</key>
+			<string>The Doppler CLI for managing secrets and config. Installs to /usr/local/bin/doppler. Prefer managed updates; avoid doppler update on fleet machines.</string>
+			<key>developer</key>
+			<string>%MUNKI_DEVELOPER%</string>
+			<key>display_name</key>
+			<string>Doppler CLI</string>
+			<key>name</key>
+			<string>%NAME%</string>
+			<key>supported_architectures</key>
+			<array>
+				<string>arm64</string>
+			</array>
+			<key>unattended_install</key>
+			<true/>
+		</dict>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>2.0</string>
+	<key>ParentRecipe</key>
+	<string>com.coreweave.it.autopkg.pkg.DopplerCLI</string>
+	<key>Process</key>
+	<array>
+		<dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>MunkiImporter</string>
+		</dict>
+	</array>
+</dict>
+</plist>
