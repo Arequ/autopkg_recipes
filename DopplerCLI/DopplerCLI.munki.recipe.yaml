@@ -7,7 +7,6 @@ Input:
   MUNKI_DEVELOPER: Doppler
   MUNKI_REPO_SUBDIR: applications/Doppler/DopplerCLI
   NAME: DopplerCLI
-  repo_subdirectory: '%MUNKI_REPO_SUBDIR%'
   pkginfo:
     blocking_applications:
     - doppler
@@ -23,7 +22,7 @@ Input:
     - arm64
     unattended_install: true
 
-ParentRecipe: com.coreweave.it.autopkg.pkg.DopplerCLI
+ParentRecipe: com.github.arequ.pkg.DopplerCLI
 
 Process:
 - Processor: MunkiPkginfoMerger
@@ -32,3 +31,7 @@ Process:
       version: '%version%'
 
 - Processor: MunkiImporter
+  Arguments:
+    extract_icon: true
+    pkg_path: '%pathname%'
+    repo_subdirectory: '%MUNKI_REPO_SUBDIR%'
