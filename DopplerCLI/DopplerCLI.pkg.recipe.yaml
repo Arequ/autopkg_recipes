@@ -1,0 +1,40 @@
+Description: Install Doppler CLI to /usr/local/bin/doppler as a flat package.
+Identifier: com.github.arequ.pkg.DopplerCLI
+MinimumVersion: '2.0'
+
+Input:
+  BUNDLE_ID: com.dopplerhq.cli
+  NAME: DopplerCLI
+
+ParentRecipe: com.coreweave.it.autopkg.download.DopplerCLI
+
+Process:
+- Processor: PkgRootCreator
+  Arguments:
+    pkgdirs:
+      usr: '0755'
+      usr/local: '0755'
+      usr/local/bin: '0755'
+    pkgroot: '%RECIPE_CACHE_DIR%/pkgroot'
+
+- Processor: Copier
+  Arguments:
+    destination_path: '%pkgroot%/usr/local/bin/doppler'
+    overwrite: true
+    source_path: '%RECIPE_CACHE_DIR%/%NAME%/doppler'
+
+- Processor: PkgCreator
+  Arguments:
+    pkg_request:
+      chown:
+      - group: wheel
+        mode: '0755'
+        path: usr/local/bin/doppler
+        user: root
+      id: '%BUNDLE_ID%'
+      options:
+        purge_ds_store: true
+      pkgname: '%NAME%-%version%'
+      pkgroot: '%RECIPE_CACHE_DIR%/pkgroot'
+      pkgtype: flat
+      version: '%version%'

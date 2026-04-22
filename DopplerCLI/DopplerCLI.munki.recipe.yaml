@@ -1,0 +1,34 @@
+Description: Import Doppler CLI pkg into Munki.
+Identifier: com.github.arequ.munki.DopplerCLI
+MinimumVersion: '2.0'
+
+Input:
+  MUNKI_CATEGORY: Developer
+  MUNKI_DEVELOPER: Doppler
+  MUNKI_REPO_SUBDIR: applications/Doppler/DopplerCLI
+  NAME: DopplerCLI
+  repo_subdirectory: '%MUNKI_REPO_SUBDIR%'
+  pkginfo:
+    blocking_applications:
+    - doppler
+    catalogs:
+    - alpha
+    category: '%MUNKI_CATEGORY%'
+    description: The Doppler CLI for managing secrets and config. Installs to /usr/local/bin/doppler.
+      Prefer managed updates; avoid doppler update on fleet machines.
+    developer: '%MUNKI_DEVELOPER%'
+    display_name: Doppler CLI
+    name: '%NAME%'
+    supported_architectures:
+    - arm64
+    unattended_install: true
+
+ParentRecipe: com.coreweave.it.autopkg.pkg.DopplerCLI
+
+Process:
+- Processor: MunkiPkginfoMerger
+  Arguments:
+    additional_pkginfo:
+      version: '%version%'
+
+- Processor: MunkiImporter

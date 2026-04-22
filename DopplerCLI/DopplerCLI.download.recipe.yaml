@@ -1,0 +1,25 @@
+Description: Download the latest Doppler CLI release tarball from GitHub (no GPG verification).
+Identifier: com.github.arequ.download.DopplerCLI
+MinimumVersion: '2.0'
+
+Input:
+  ASSET_REGEX: '^doppler_.*_macOS_arm64\.tar\.gz$'
+  NAME: DopplerCLI
+  github_repo: DopplerHQ/cli
+
+Process:
+- Processor: GitHubReleasesInfoProvider
+  Arguments:
+    asset_regex: '%ASSET_REGEX%'
+    github_repo: '%github_repo%'
+    latest_only: true
+
+- Processor: URLDownloader
+
+- Processor: EndOfCheckPhase
+
+- Processor: Unarchiver
+  Arguments:
+    archive_path: '%pathname%'
+    destination_path: '%RECIPE_CACHE_DIR%/%NAME%'
+    purge_destination: true
