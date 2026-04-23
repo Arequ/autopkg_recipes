@@ -33,5 +33,5 @@ Process:
 - Processor: MunkiImporter
   Arguments:
     extract_icon: true
-    pkg_path: '%pathname%'
+    pkg_path: '%pkg_path%'
     repo_subdirectory: '%MUNKI_REPO_SUBDIR%'
