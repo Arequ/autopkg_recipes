@@ -6,7 +6,7 @@ Input:
   BUNDLE_ID: com.dopplerhq.cli
   NAME: DopplerCLI
 
-ParentRecipe: com.coreweave.it.autopkg.download.DopplerCLI
+ParentRecipe: com.github.arequ.download.DopplerCLI
 
 Process:
 - Processor: PkgRootCreator
