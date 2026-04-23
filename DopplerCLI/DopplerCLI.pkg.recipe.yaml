@@ -1,19 +1,10 @@
-Description: >
-  Install Doppler CLI as a flat package (default /usr/local/bin/doppler).
-  Override INSTALL_BINDIR_RELATIVE and BINARY_FILENAME to change the install
-  directory and binary name. When you change INSTALL_BINDIR_RELATIVE, replace
-  PkgRootCreator Arguments pkgdirs with a single mapping from that same path
-  (relative to the volume root, no leading slash) to its mode, e.g.
-  opt/corporation/bin: '0755'.
+Description: Install Doppler CLI to /usr/local/bin/doppler as a flat package.
 Identifier: com.github.arequ.pkg.DopplerCLI
 MinimumVersion: '2.0'
 
 Input:
   BUNDLE_ID: com.dopplerhq.cli
-  BINARY_FILENAME: doppler
-  INSTALL_BINDIR_RELATIVE: usr/local/bin
   NAME: DopplerCLI
-  PKG_DIR_MODE: '0755'
 
 ParentRecipe: com.github.arequ.download.DopplerCLI
 
@@ -21,12 +12,14 @@ Process:
 - Processor: PkgRootCreator
   Arguments:
     pkgdirs:
-      usr/local/bin: '%PKG_DIR_MODE%'
+      usr: '0755'
+      usr/local: '0755'
+      usr/local/bin: '0755'
     pkgroot: '%RECIPE_CACHE_DIR%/pkgroot'
 
 - Processor: Copier
   Arguments:
-    destination_path: '%pkgroot%/%INSTALL_BINDIR_RELATIVE%/%BINARY_FILENAME%'
+    destination_path: '%pkgroot%/usr/local/bin/doppler'
     overwrite: true
     source_path: '%RECIPE_CACHE_DIR%/%NAME%/doppler'
 
@@ -36,7 +29,7 @@ Process:
       chown:
       - group: wheel
         mode: '0755'
-        path: '%INSTALL_BINDIR_RELATIVE%/%BINARY_FILENAME%'
+        path: usr/local/bin/doppler
         user: root
       id: '%BUNDLE_ID%'
       options:
