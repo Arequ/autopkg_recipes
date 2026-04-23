@@ -13,8 +13,7 @@ Input:
     catalogs:
     - alpha
     category: '%MUNKI_CATEGORY%'
-    description: The Doppler CLI for managing secrets and config. Installs to /usr/local/bin/doppler.
-      Prefer managed updates; avoid doppler update on fleet machines.
+    description: The Doppler CLI for managing secrets and config.
     developer: '%MUNKI_DEVELOPER%'
     display_name: Doppler CLI
     name: '%NAME%'
