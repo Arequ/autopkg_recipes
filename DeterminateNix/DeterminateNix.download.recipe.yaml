@@ -1,0 +1,19 @@
+Description: Download the latest Determinate Nix universal macOS installer pkg (stable channel; URL redirects to the current release).
+Identifier: com.github.arequ.download.DeterminateNix
+MinimumVersion: '2.0'
+
+Input:
+  DOWNLOAD_URL: https://install.determinate.systems/determinate-pkg/stable/Universal
+  NAME: DeterminateNix
+
+Process:
+- Processor: URLDownloader
+  Arguments:
+    url: '%DOWNLOAD_URL%'
+    prefetch_filename: true
+
+- Processor: EndOfCheckPhase
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: 'download_changed == FALSE'

@@ -1,0 +1,26 @@
+Description: Import Determinate Nix installer pkg into Munki.
+Identifier: com.github.arequ.munki.DeterminateNix
+MinimumVersion: '2.0'
+
+Input:
+  MUNKI_CATEGORY: Developer
+  MUNKI_DEVELOPER: Determinate Systems
+  MUNKI_REPO_SUBDIR: applications/Determinate/DeterminateNix
+  NAME: DeterminateNix
+  pkginfo:
+    catalogs:
+    - testing
+    category: '%MUNKI_CATEGORY%'
+    description: Determinate Nix — Nix installer and tooling for macOS.
+    developer: '%MUNKI_DEVELOPER%'
+    display_name: Determinate Nix
+    name: '%NAME%'
+    unattended_install: true
+
+ParentRecipe: com.github.arequ.download.DeterminateNix
+
+Process:
+- Processor: MunkiImporter
+  Arguments:
+    pkg_path: '%pathname%'
+    repo_subdirectory: '%MUNKI_REPO_SUBDIR%'
